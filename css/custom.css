@@ -1,0 +1,21 @@
+body {
+	font-size: 1em;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 400;
+	line-height: 17.1429px;
+}
+
+textarea, textarea.form-control {
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+button#frmtBtn {
+    margin-left: 3px;
+}
+
+.CodeMirror {
+    height: auto;
+}
