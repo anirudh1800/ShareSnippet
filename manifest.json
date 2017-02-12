@@ -2,25 +2,13 @@
     "manifest_version" : 2,
     "name" : "ShareSnippet",
     "version" : "1.0",
-
-    "description" : " Share your code snippet over web",
-
-    "content_scripts" : [
-        {
-            "matches" : ["*://mail.google.com/*"],
-            "js" : ["snippet-loader.js",  "libs/highlight.min.js", "libs/jquery-3.1.1.min.js", "libs/bootstrap.min.js"],
-            "css" : ["css/highlight.min.css", "css/bootstrap-theme.min.css"],
-            "fonts" :["fonts/glyphicons-halflings-regular.ttf"]
-        }
-    ], 
-
+    "description" : " Share your code snippet over web", 
     "background" : {
         "scripts": ["background.js"]
     },
-
     "browser_action": {
         "default_icon": "icons/share-snippet.png",
         "default_popup": "popup.html"
-    }
-
+    },
+   "options_page": "snippet-loader.html"
 }
