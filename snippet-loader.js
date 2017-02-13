@@ -43,6 +43,8 @@ $(document).ready(function () {
         $("#editDiv").show();
     });
 
+    $("#diffDiv").hide();
+
 });
 
 function initComponents() {
