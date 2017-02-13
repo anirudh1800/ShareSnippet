@@ -2,19 +2,27 @@
 <html>
 
 <head>
+
     <!-- Stylesheets -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/codemirror.css">
+    <link rel=stylesheet href="libs/addons/merge/merge.css">
     <link rel="stylesheet" href="css/custom.css">
 
     <!-- Libraries -->
     <script src="libs/jquery-3.1.1.min.js"></script>
     <script src="libs/bootstrap.min.js"></script>
     <script src="libs/codemirror.js"></script>
-    <script src="mode/javascript/javascript.js"></script>
-    <script src="mode/clike/clike.js"></script>
-    <script src="mode/xml/xml.js"></script>
-    <script src="mode/htmlmixed/htmlmixed.js"></script>
+    <script src="libs/diff_match_patch.js"></script>
+    <script src="libs/addons/merge/merge.js"></script>
+
+        <!-- Language Supported-->
+     <script src="mode/javascript/javascript.js"></script>
+     <script src="mode/clike/clike.js"></script>
+     <script src="mode/xml/xml.js"></script>
+     <script src="mode/htmlmixed/htmlmixed.js"></script>
+     <script src="mode/css/css.js"></script>
+
     <script src="libs/beautify.js"></script>
     <script src="libs/beautify-css.js"></script>
     <script src="libs/beautify-html.js"></script>
@@ -22,21 +30,29 @@
     <!-- Developer -->
     <script src="snippet-loader.js"></script>
    
-
 </head>
 
 <body>
-    <!-- Share Snippet Dialog -->
 
+    <!-- Share Snippet Dialog -->
     <form>
         <br/>
     <div class="form-group">
-        <button type="button" class="btn btn-primary" id="frmtBtn">Format</button>
+        <button type="button" class="btn btn-primary" id="editBtn">Editor</button>
+        <button type="button" class="btn btn-primary" id="diffBtn">Diff/Merge</button>
     </div>
-    <div class="form-group">
+    <div id="editDiv" class="form-group">
+        <button type="button" class="btn btn-primary" id="frmtBtn">Format</button>
+        <button type="button" class="btn btn-primary" id="clrBtn">Clear</button>
         <textarea class="form-control" style="display:none;" id="editArea"></textarea>
     </div>
-
+    <div id="diffDiv" class="form-group">
+     <button type="button" class="btn btn-primary" id="showDiffBtn">Diff Below</button>
+     <button type="button" class="btn btn-primary" id="twoWayDiffBtn">Two-way Merge</button>
+     <button type="button" class="btn btn-primary" id="threeWayDiffBtn">Three-way Merge</button>
+     <div id="mergeView"></div>
+    </div>
+    
     </form>
 </body>
 

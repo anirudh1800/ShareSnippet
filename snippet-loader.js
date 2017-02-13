@@ -1,26 +1,146 @@
 // snippet-loader.js
-var editArea = null;
+var editBtn = null;
+var diffBtn = null;
+
+// edit data
 var frmtBtn = null;
+var clrBtn = null;
 var beautify_in_progress = false;
 var editor = null;
+var editArea = null;
 
-$(document)
-    .ready(function () {
-        editArea = document.getElementById('editArea');
-        frmtBtn = document.getElementById('frmtBtn');
+// diff data
+var diffEditor = null;
+var mergeView = null;
+var showDiffBtn = null;
+var twoWayDiffBtn = null;
+var threeWayDiffBtn = null;
+var value = "";
+var orig1 = "";
+var orig2 = "";
+var panes = 3;
+var highlight = false;
+var connect = null;
+var collapse = false;
 
-        editor = CodeMirror.fromTextArea(editArea, {
-            lineNumbers: true,
-            viewportMargin: Infinity
-        });
+$(document).ready(function () {
+    // Initialize UI
+    initComponents();
 
-        editor.focus();
+    initEditUI();
 
-        frmtBtn.addEventListener("click", function () {
-           beautify();
-        });
+    initDiffUI();
 
+    initEvents();
+
+    diffBtn.addEventListener("click", function () {
+        $("#editDiv").hide();
+        $("#diffDiv").show();
     });
+
+    editBtn.addEventListener("click", function () {
+        $("#diffDiv").hide();
+        $("#editDiv").show();
+    });
+
+});
+
+function initComponents() {
+    editBtn = document.getElementById('editBtn');
+    diffBtn = document.getElementById('diffBtn');
+
+    frmtBtn = document.getElementById('frmtBtn');
+    clrBtn = document.getElementById('clrBtn');
+    beautify_in_progress = false;
+    editArea = document.getElementById('editArea');
+
+    mergeView = document.getElementById("mergeView");
+    showDiffBtn = document.getElementById("showDiffBtn");
+    twoWayDiffBtn = document.getElementById("twoWayDiffBtn");
+    threeWayDiffBtn = document.getElementById("threeWayDiffBtn");
+}
+
+function initEditUI() {
+    // Initialize data
+    editor = CodeMirror.fromTextArea(editArea, {
+        lineNumbers: true,
+        viewportMargin: Infinity
+    });
+
+    editor.focus();
+}
+
+function initDiffUI() {
+    mergeView.innerHTML = "";
+    highlight = false;
+
+    diffEditor = CodeMirror.MergeView(mergeView, {
+        lineNumbers: true,
+        viewportMargin: Infinity,
+        value: "",
+        origLeft: panes == 3
+            ? orig1
+            : null,
+        orig: orig2,
+        allowEditingOriginals: true,
+        highlightDifferences: highlight,
+        revertButtons: true,
+        connect: connect,
+        collapseIdentical: collapse
+    });
+
+    resize(diffEditor);
+}
+
+function initEvents() {
+    //edit view events
+    frmtBtn
+        .addEventListener("click", function () {
+            if(editor.getValue() == "")
+                return; 
+            beautify();
+        });
+
+    clrBtn.addEventListener("click", function () {
+        if (!editor) 
+            editor = CodeMirror.fromTextArea(editArea, {
+                lineNumbers: true,
+                viewportMargin: Infinity
+            });
+        
+        editor.setValue("");
+    });
+
+    // diff view events
+    showDiffBtn.addEventListener("click", function () {
+        if(diffEditor.edit.getValue() == "")
+            return; 
+
+        if (highlight == true) 
+            showDiffBtn.innerText = "Diff Below";
+        else 
+            showDiffBtn.innerText = "Show Diff";
+        
+        toggleDifferences()
+    });
+
+    twoWayDiffBtn.addEventListener("click", function () {
+        if(panes == 2)
+            return;
+
+        panes = 2;
+        initDiffUI()
+    });
+
+    threeWayDiffBtn.addEventListener("click", function () {
+        if(panes == 3)
+            return;
+
+        panes = 3;
+        initDiffUI()
+    });
+
+}
 
 function beautify() {
     if (beautify_in_progress) 
@@ -60,7 +180,7 @@ function beautify() {
     if (looks_like_html(source)) {
         output = html_beautify(source, opts);
     } else {
-       /* if ($('#detect-packers').prop('checked')) {
+        /* if ($('#detect-packers').prop('checked')) {
             source = unpacker_filter(source);
         }*/
         output = js_beautify(source, opts);
@@ -78,4 +198,39 @@ function looks_like_html(source) {
     // <foo> - looks like html
     var trimmed = source.replace(/^[ \t\n\r]+/, '');
     return trimmed && (trimmed.substring(0, 1) === '<');
+}
+
+function toggleDifferences() {
+    resize(diffEditor);
+    diffEditor.setShowDifferences(highlight = !highlight);
+}
+
+function mergeViewHeight(mergeView) {
+    function editorHeight(editor) {
+        if (!editor) 
+            return 0;
+        return editor
+            .getScrollInfo()
+            .height;
+    }
+    return Math.max(editorHeight(mergeView.leftOriginal()), editorHeight(mergeView.editor()), editorHeight(mergeView.rightOriginal()));
+}
+
+function resize(mergeView) {
+    var height = mergeViewHeight(mergeView);
+    for (;;) {
+        if (mergeView.leftOriginal()) 
+            mergeView.leftOriginal().setSize(null, height);
+        mergeView
+            .editor()
+            .setSize(null, height);
+        if (mergeView.rightOriginal()) 
+            mergeView.rightOriginal().setSize(null, height);
+        var newHeight = mergeViewHeight(mergeView);
+        if (newHeight >= height) 
+            break;
+        else 
+            height = newHeight;
+        }
+    mergeView.wrap.style.height = height + "px";
 }
