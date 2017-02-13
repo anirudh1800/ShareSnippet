@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/codemirror.css">
     <link rel=stylesheet href="libs/addons/merge/merge.css">
+    <link rel="stylesheet" href="css/toastr.min.css">
     <link rel="stylesheet" href="css/custom.css">
 
     <!-- Libraries -->
@@ -15,6 +16,8 @@
     <script src="libs/codemirror.js"></script>
     <script src="libs/diff_match_patch.js"></script>
     <script src="libs/addons/merge/merge.js"></script>
+    <script src="libs/toastr.min.js"></script>
+    <script src="libs/clipboard.min.js"></script>
 
         <!-- Language Supported-->
      <script src="mode/javascript/javascript.js"></script>
@@ -47,6 +50,7 @@
     <div id="editDiv" class="form-group">
         <button type="button" class="btn btn-primary" id="frmtBtn">Format</button>
         <button type="button" class="btn btn-primary" id="clrBtn">Clear</button>
+        <button type="button" class="btn btn-primary" id="cpyBtn">Copy</button>
         <textarea class="form-control" style="display:none;" id="editArea"></textarea>
     </div>
     <div id="diffDiv" class="form-group">

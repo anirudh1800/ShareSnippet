@@ -20,7 +20,14 @@ button#frmtBtn {
 }
 
 button#clrBtn {
-    background-color : #78909C;
+    background-color : #0097A7;
+    margin-left: 6px;
+    margin-bottom: 3px;
+    font-size: 10px;
+}
+
+button#cpyBtn {
+    background-color : #FBC02D;
     margin-left: 6px;
     margin-bottom: 3px;
     font-size: 10px;

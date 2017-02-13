@@ -5,6 +5,7 @@ var diffBtn = null;
 // edit data
 var frmtBtn = null;
 var clrBtn = null;
+var cpyBtn = null;
 var beautify_in_progress = false;
 var editor = null;
 var editArea = null;
@@ -45,6 +46,33 @@ $(document).ready(function () {
 
     $("#diffDiv").hide();
 
+    toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-bottom-center",
+        "preventDuplicates": true,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+
+    new Clipboard('#cpyBtn', {
+            text: function(trigger) {
+                console.log("text sent!");
+                return editor.getValue();
+            }
+        }).on('success', function() {
+            toastr.success("Saved in Clipboard!");
+        });
+
 });
 
 function initComponents() {
@@ -53,6 +81,7 @@ function initComponents() {
 
     frmtBtn = document.getElementById('frmtBtn');
     clrBtn = document.getElementById('clrBtn');
+    cpyBtn = document.getElementById('cpyBtn');
     beautify_in_progress = false;
     editArea = document.getElementById('editArea');
 
@@ -236,3 +265,4 @@ function resize(mergeView) {
         }
     mergeView.wrap.style.height = height + "px";
 }
+
